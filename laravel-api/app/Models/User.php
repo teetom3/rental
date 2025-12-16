@@ -19,8 +19,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        // ⚠️ on ne met PAS company_id ici volontairement
-        // il sera injecté côté backend
+        'company_id',
+        'role',
     ];
 
     /**

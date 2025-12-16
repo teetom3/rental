@@ -11,12 +11,14 @@ class Equipment extends Model
 {
     use HasFactory;
 
+    protected $table = 'equipments';
+
     protected $fillable = [
         'name',
         'category',
         'description',
         'total_qty',
-        // ⚠️ pas company_id ici non plus
+        'company_id',
     ];
 
     /**

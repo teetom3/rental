@@ -12,7 +12,7 @@ class EquipmentController extends Controller
 
     public function index (Request $request){
 
-        $companyId = $request->$user()->company_id;
+        $companyId = $request->user()->company_id;
 
         $equipments = Equipment::where('company_id', $companyId)
             ->orderBy('name','desc')
@@ -22,8 +22,8 @@ class EquipmentController extends Controller
     }
 
     public function store(EquipmentRequest $request){
-        
-        $companyId = $request->$user()->company_id;
+
+        $companyId = $request->user()->company_id;
 
         $data = $request->validated();
 

@@ -14,15 +14,15 @@ use Illuminate\Support\Str;
 class AuthController extends Controller
 {
     public function register(RegisterRequest $request) {
-        
+
         $data = $request->validated();
 
-        $company = ([
+        $company = Company::create([
             'name' => $data['company_name'],
             'slug' => Str::slug($data['company_name']) . '-' . Str::lower(Str::random(6)),
         ]);
 
-        $user = ([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
@@ -44,7 +44,7 @@ class AuthController extends Controller
 
         $data = $request->validated();
 
-        $user = User::find('email', $data['email'])->first();
+        $user = User::where('email', $data['email'])->first();
 
        if (! $user || ! Hash::check($data['password'], $user->password)) {
 
@@ -52,40 +52,36 @@ class AuthController extends Controller
                 'message' => 'Invalid credentials.',
             ],422);
         }
-                $token = $user->createToken('api')->plainTextToken;
+
+        $token = $user->createToken('api')->plainTextToken;
 
         return response()->json([
             'token'   => $token,
             'user'    => $user,
-            'company' => $user->company, // requires relation in User model
+            'company' => $user->company,
         ]);
-
-
     }
 
 
 
     public function getMe(Request $request){
 
-        $user = $request()->user();
+        $user = $request->user();
 
         return response()->json([
             'user'=> $user,
             'company'=> $user?->company
-
         ]);
     }
 
     public function logout(Request $request){
 
-        $user = $request()->user();
+        $user = $request->user();
 
         $user->currentAccessToken()?->delete();
 
         return response()->json([
-            'message' => 'loged out.'
+            'message' => 'logged out.'
         ]);
-
-
     }
 }
